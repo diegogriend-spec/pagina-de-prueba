@@ -1,0 +1,212 @@
+<!DOCTYPE html><html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Una pregunta para ti 💖</title>  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #ff758c, #ff7eb3);
+      position: relative;
+    }
+
+    .card {
+      width: 90%;
+      max-width: 500px;
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(12px);
+      padding: 40px;
+      border-radius: 25px;
+      text-align: center;
+      color: white;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      z-index: 5;
+    }
+
+    h1 {
+      font-size: 2.3rem;
+      margin-bottom: 20px;
+    }
+
+    p {
+      line-height: 1.6;
+      margin-bottom: 30px;
+      font-size: 1.1rem;
+    }
+
+    .buttons {
+      position: relative;
+      height: 180px;
+    }
+
+    button {
+      border: none;
+      padding: 15px 28px;
+      border-radius: 50px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: 0.25s;
+      position: absolute;
+      touch-action: manipulation;
+    }
+
+    #yesBtn {
+      background: #ff2e63;
+      color: white;
+      left: 50%;
+      transform: translateX(-50%);
+      top: 40px;
+    }
+
+    #yesBtn:active {
+      transform: translateX(-50%) scale(1.05);
+    }
+
+    /* BOTÓN NO: existe pero nunca es una negativa real */
+    #noBtn {
+      background: white;
+      color: #ff2e63;
+      right: 10%;
+      top: 110px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    select {
+      width: 100%;
+      padding: 14px;
+      border-radius: 12px;
+      border: none;
+      margin-top: 20px;
+      font-size: 1rem;
+    }
+
+    #confirmBtn {
+      position: relative;
+      width: 100%;
+      margin-top: 20px;
+      background: #ff2e63;
+      color: white;
+      padding: 15px;
+      border-radius: 12px;
+    }
+
+    .heart {
+      position: absolute;
+      color: rgba(255,255,255,0.7);
+      animation: float 5s linear infinite;
+    }
+
+    @keyframes float {
+      from { transform: translateY(100vh); opacity: 1; }
+      to { transform: translateY(-10vh); opacity: 0; }
+    }
+
+    .note {
+      margin-top: 15px;
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+
+  </style></head>
+<body>  <!-- PANTALLA 1 -->  <div class="card" id="screen1">
+    <h1>Hola Angie 💖</h1><p>
+  Se que te he hecho enojar por eso quiero remediarlo...
+  <br><br>
+  ¿Te gustaría volver a tener una cita conmigo? ✨
+</p>
+
+<div class="buttons">
+  <button id="yesBtn">Sí 💘</button>
+  <button id="noBtn">No 😅</button>
+</div>
+
+<div class="note">Toca cualquier opción para continuar 😉</div>
+
+  </div>  <!-- PANTALLA 2 -->  <div class="card hidden" id="screen2">
+    <h1>Perfecto 😎❤️</h1><p>
+  Me gusta tu decisión… no había otra correcta 😌✨
+</p>
+
+<p>Elige cuándo nos vemos:</p>
+
+<select id="dateOption">
+  <option value="">Selecciona una opción</option>
+  <option value="Viernes 5 - 7:00 PM">Viernes 5 - 7:00 PM</option>
+  <option value="Sábado 6 - 5:00 PM">Sábado 6 - 5:00 PM</option>
+  <option value="Domingo 7 - 4:00 PM">Domingo 7 - 4:00 PM</option>
+  <option value="Viernes 12 - 7:00 PM">Viernes 12 - 7:00 PM</option>
+  <option value="Sábado 13 - 5:00 PM">Sábado 13 - 5:00 PM</option>
+</select>
+
+<button id="confirmBtn">Confirmar cita 💖</button>
+
+  </div>  <script>
+    const yesBtn = document.getElementById('yesBtn');
+    const noBtn = document.getElementById('noBtn');
+    const confirmBtn = document.getElementById('confirmBtn');
+
+    const screen1 = document.getElementById('screen1');
+    const screen2 = document.getElementById('screen2');
+
+    // EN MÓVIL: NO ES NEGATIVA REAL (SE CONVIERTE EN SI)
+    function forceYesFlow() {
+      screen1.style.display = 'none';
+      screen2.classList.remove('hidden');
+      screen2.style.display = 'block';
+      explosionHearts();
+    }
+
+    yesBtn.addEventListener('click', forceYesFlow);
+    noBtn.addEventListener('click', () => {
+      noBtn.innerText = "Igual es sí 😏";
+      setTimeout(forceYesFlow, 500);
+    });
+
+    confirmBtn.addEventListener('click', () => {
+      const option = document.getElementById('dateOption').value;
+
+      if (!option) {
+        alert('Elige una opción 😅');
+        return;
+      }
+
+      const phone = '573138828441';
+      const message = `Hola 💖 Confirmo nuestra cita para: ${option}`;
+      const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+
+      window.location.href = url;
+    });
+
+    function createHeart() {
+      const heart = document.createElement('div');
+      heart.classList.add('heart');
+      heart.innerHTML = '❤';
+      heart.style.left = Math.random() * 100 + 'vw';
+      heart.style.fontSize = (Math.random() * 25 + 10) + 'px';
+      heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 5000);
+    }
+
+    setInterval(createHeart, 300);
+
+    function explosionHearts() {
+      for (let i = 0; i < 60; i++) {
+        setTimeout(createHeart, i * 40);
+      }
+    }
+  </script></body>
+</html>
